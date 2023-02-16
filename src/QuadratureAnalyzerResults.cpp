@@ -1,32 +1,32 @@
-#include "SimpleSerialAnalyzerResults.h"
+#include "QuadratureAnalyzerResults.h"
 #include <AnalyzerHelpers.h>
-#include "SimpleSerialAnalyzer.h"
-#include "SimpleSerialAnalyzerSettings.h"
+#include "QuadratureAnalyzer.h"
+#include "QuadratureAnalyzerSettings.h"
 #include <iostream>
 #include <fstream>
 
-SimpleSerialAnalyzerResults::SimpleSerialAnalyzerResults( SimpleSerialAnalyzer* analyzer, SimpleSerialAnalyzerSettings* settings )
+QuadratureAnalyzerResults::QuadratureAnalyzerResults( QuadratureAnalyzer* analyzer, QuadratureAnalyzerSettings* settings )
 :	AnalyzerResults(),
 	mSettings( settings ),
 	mAnalyzer( analyzer )
 {
 }
 
-SimpleSerialAnalyzerResults::~SimpleSerialAnalyzerResults()
+QuadratureAnalyzerResults::~QuadratureAnalyzerResults()
 {
 }
 
-void SimpleSerialAnalyzerResults::GenerateBubbleText( U64 frame_index, Channel& channel, DisplayBase display_base )
+void QuadratureAnalyzerResults::GenerateBubbleText( U64 frame_index, Channel& channel, DisplayBase display_base )
 {
 	ClearResultStrings();
 	Frame frame = GetFrame( frame_index );
 
 	char number_str[128];
-	AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 8, number_str, 128 );
+	AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 16, number_str, 128 );
 	AddResultString( number_str );
 }
 
-void SimpleSerialAnalyzerResults::GenerateExportFile( const char* file, DisplayBase display_base, U32 export_type_user_id )
+void QuadratureAnalyzerResults::GenerateExportFile( const char* file, DisplayBase display_base, U32 export_type_user_id )
 {
 	std::ofstream file_stream( file, std::ios::out );
 
@@ -44,7 +44,7 @@ void SimpleSerialAnalyzerResults::GenerateExportFile( const char* file, DisplayB
 		AnalyzerHelpers::GetTimeString( frame.mStartingSampleInclusive, trigger_sample, sample_rate, time_str, 128 );
 
 		char number_str[128];
-		AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 8, number_str, 128 );
+		AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 16, number_str, 128 );
 
 		file_stream << time_str << "," << number_str << std::endl;
 
@@ -58,25 +58,25 @@ void SimpleSerialAnalyzerResults::GenerateExportFile( const char* file, DisplayB
 	file_stream.close();
 }
 
-void SimpleSerialAnalyzerResults::GenerateFrameTabularText( U64 frame_index, DisplayBase display_base )
+void QuadratureAnalyzerResults::GenerateFrameTabularText( U64 frame_index, DisplayBase display_base )
 {
 #ifdef SUPPORTS_PROTOCOL_SEARCH
 	Frame frame = GetFrame( frame_index );
 	ClearTabularText();
 
 	char number_str[128];
-	AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 8, number_str, 128 );
+	AnalyzerHelpers::GetNumberString( frame.mData1, display_base, 16, number_str, 128 );
 	AddTabularText( number_str );
 #endif
 }
 
-void SimpleSerialAnalyzerResults::GeneratePacketTabularText( U64 packet_id, DisplayBase display_base )
+void QuadratureAnalyzerResults::GeneratePacketTabularText( U64 packet_id, DisplayBase display_base )
 {
 	//not supported
 
 }
 
-void SimpleSerialAnalyzerResults::GenerateTransactionTabularText( U64 transaction_id, DisplayBase display_base )
+void QuadratureAnalyzerResults::GenerateTransactionTabularText( U64 transaction_id, DisplayBase display_base )
 {
 	//not supported
 }
